@@ -12,7 +12,42 @@ program farmville {
 	//  VISUALES
  	game.addVisualCharacter(hector)
  	game.addVisualIn(new Maiz(), game.at(1, 1))
+ 	game.addVisualIn(new Trigo(), game.at(1, 2))
+ 	game.addVisualIn(new Tomaco(), game.at(1, 3))
  	
+ 	// ACCIONES
+	keyboard.m().onPressDo {
+		game.addVisualIn(new Maiz(), hector.position())
+	}
+	keyboard.t().onPressDo {
+		game.addVisualIn(new Trigo(), hector.position())
+	}
+	keyboard.o().onPressDo {
+		game.addVisualIn(new Tomaco(), hector.position())
+	}
+ 	keyboard.r().onPressDo {
+ 		const planta = game.getObjectsIn(hector.position())
+ 		const plantaARegar = planta.find {p => p != hector}
+ 		plantaARegar.regar()
+ 	}
+ 	keyboard.c().onPressDo {
+ 		const planta = game.getObjectsIn(hector.position())
+ 		const plantaACosechar = planta.find {p => p != hector}
+ 		if (plantaACosechar.listaParaCosecha()){
+ 			hector.plantasParaVender(plantaACosechar)
+ 			game.removeVisual(plantaACosechar)
+ 		}
+ 		else {game.say(hector, "no tengo nada para cosechar")}
+ 	}
+ 	keyboard.v().onPressDo {
+ 		const oro = hector.plantaParaVender.sum({s => s.valor()})
+ 		hector.plantaParaVender.clear()
+ 	}
+ 	keyboard.space(){
+ 		game.say(hector, hector.plantaParaVender.size() ; oro)
+ 	}
  	//  COMIENZA
 	game.start()
+	
+	
 }
